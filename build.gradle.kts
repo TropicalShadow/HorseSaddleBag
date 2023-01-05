@@ -18,19 +18,17 @@ repositories {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
 
     implementation("org.jetbrains.exposed", "exposed-core", "0.40.1")
     implementation("org.jetbrains.exposed", "exposed-dao", "0.40.1")
     implementation("org.jetbrains.exposed", "exposed-jdbc", "0.40.1")
-    implementation("org.xerial:sqlite-jdbc:3.40.0.0")
+    api("org.xerial:sqlite-jdbc:3.40.0.0")
 
 }
 
 tasks{
     runServer {
-
         minecraftVersion("1.19.2")
     }
     test {
@@ -42,6 +40,9 @@ tasks{
     shadowJar{
         archiveBaseName.set(project.name)
         archiveClassifier.set("")
+
+        relocate("org.jetbrains.kotlinx", "club.tesseract.horsechestsaddle.kotlinx")
+        relocate("org.xerial", "club.tesseract.horsechestsaddle.xerial")
     }
     processResources {
         filter<org.apache.tools.ant.filters.ReplaceTokens>("tokens" to mapOf("version" to project.version))
