@@ -8,6 +8,7 @@ import kotlin.io.path.exists
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
 
+@Suppress("unused")
 object ConfigHelper {
 
     inline fun <reified T : Any> initConfigFile(path: Path, emptyObj: T, format: Json = prettyPrintFormat): T {

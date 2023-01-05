@@ -1,6 +1,6 @@
 # Horse Saddle Bag
 
-> A PaperSpigot plugin that allows players to store items in a saddle bag.
+> A PaperSpigot plugin that allows players to store items in a saddlebag.
 
 ---
 

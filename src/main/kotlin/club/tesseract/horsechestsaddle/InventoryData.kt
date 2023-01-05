@@ -20,6 +20,7 @@ class InventoryData(capacity: Int) {
     }
 
     companion object{
+        @Suppress("UNCHECKED_CAST")
         fun deserialize(capacity: Int, bytes: ByteArray): InventoryData{
             val inputStream = ByteArrayInputStream(bytes)
             val objectInputStream = ObjectInputStream(inputStream)
