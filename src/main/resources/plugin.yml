@@ -1,0 +1,11 @@
+main: club.tesseract.horsechestsaddle.HorseSaddleBag
+name: HorseChestSaddle
+api-version: 1.19
+version: @version@
+description: Allows you to put a chest on a horse
+author: TropicalShadow
+website: "https://tesseract.club/"
+commands:
+  horsechest:
+    permission: "horsechestsaddle.command"
+    default: true
