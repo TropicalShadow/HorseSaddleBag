@@ -3,6 +3,7 @@ package club.tesseract.horsechestsaddle.listener
 import club.tesseract.horsechestsaddle.config.ConfigManager
 import club.tesseract.horsechestsaddle.config.impl.CustomItemConfig
 import club.tesseract.horsechestsaddle.holder.SaddleBag
+import club.tesseract.horsechestsaddle.utils.ComponentUtils.toMini
 import org.bukkit.Material
 import org.bukkit.entity.Horse
 import org.bukkit.event.EventHandler
@@ -26,6 +27,7 @@ object HorseInteractionListener: Listener {
         if(itemStack.type != Material.SADDLE) return
         if(!itemStack.itemMeta.persistentDataContainer.has(CustomItemConfig.customItemKey))return
         val horse = event.rightClicked as? Horse ?: return
+        horse.ownerUniqueId?: return event.player.sendMessage("<red>This horse does not have an owner!</red>".toMini())
         val currentSaddle = horse.inventory.saddle
         if(currentSaddle != null && currentSaddle.type != Material.AIR)return
         event.isCancelled = true
@@ -37,13 +39,13 @@ object HorseInteractionListener: Listener {
     fun onInteraction(event: PlayerInteractEntityEvent){
         if(event.hand != EquipmentSlot.HAND)return
         if(!event.player.isSneaking) return
-        val horse = event.rightClicked as? Horse?: return
-        val ownerUUID = horse.ownerUniqueId?: return
+        val horse = event.rightClicked
+        if(horse !is Horse) return
+        val ownerUUID = horse.ownerUniqueId ?: return
         if(ownerUUID != event.player.uniqueId && ConfigManager.getGeneralConfig().onlyOwnersAccessChest) return
-        val saddle = horse.inventory.saddle?: return
+        val saddle = horse.inventory.saddle ?: return
         if(!saddle.itemMeta.persistentDataContainer.has(CustomItemConfig.customItemKey))return
         val invSize = saddle.itemMeta.persistentDataContainer.getOrDefault(CustomItemConfig.customItemKey, PersistentDataType.INTEGER, 27)
-
         event.isCancelled = true
         val saddleBag = SaddleBag.getExisting(horse)?: let{
             SaddleBag.createNew(horse, event.player, invSize)
@@ -53,11 +55,13 @@ object HorseInteractionListener: Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     fun onEntityDeath(event: EntityDeathEvent){
-        val entity = event.entity as? Horse?: return
-        val saddle = entity.inventory.saddle?: return
+        val entity = event.entity
+        if(entity !is Horse)return
+        val horse: Horse = entity
+        val saddle = horse.inventory.saddle?: return
         if(!saddle.itemMeta.persistentDataContainer.has(CustomItemConfig.customItemKey))return
-        val bag = SaddleBag.cache.remove(entity.uniqueId)?: return
-        try { bag.dropContent(entity.location) }catch (_: Exception){}
+        val bag = SaddleBag.cache.remove(horse.uniqueId)?: return
+        try { bag.dropContent(horse.location) }catch (_: Exception){}
         bag.delete()
     }
 
@@ -71,7 +75,8 @@ object HorseInteractionListener: Listener {
         if(event.inventory !is HorseInventory)return
         val horse = event.inventory.holder as? Horse ?: return
         if((event.slot != 0) || (event.currentItem == null))return
-        if(horse.ownerUniqueId != event.whoClicked.uniqueId && ConfigManager.getGeneralConfig().onlyOwnersAccessChest) {
+        val ownerUUID = horse.ownerUniqueId?: return
+        if(ownerUUID != event.whoClicked.uniqueId && ConfigManager.getGeneralConfig().onlyOwnersAccessChest) {
             event.isCancelled = true
             return
         }

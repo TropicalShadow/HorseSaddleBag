@@ -8,15 +8,17 @@ plugins {
 }
 
 group = "club.tesseract"
-version = "1.0.0"
+version = "1.1.0"
 
 repositories {
+    mavenLocal()
     mavenCentral()
-    maven { url = uri("https://repo.papermc.io/repository/maven-public/") }
+    maven("https://repo.papermc.io/repository/maven-public/")
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
+    compileOnly("club.tesseract:HorseOverhaul:2.0.2")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
 
@@ -29,7 +31,7 @@ dependencies {
 
 tasks{
     runServer {
-        minecraftVersion("1.19.2")
+        minecraftVersion("1.20.1")
     }
     test {
         useJUnitPlatform {
@@ -41,7 +43,7 @@ tasks{
         archiveBaseName.set(project.name)
         archiveClassifier.set("")
 
-        relocate("org.jetbrains.kotlinx", "club.tesseract.horsechestsaddle.kotlinx")
+        relocate("kotlinx", "club.tesseract.horsechestsaddle.kotlinx")
         relocate("org.xerial", "club.tesseract.horsechestsaddle.xerial")
     }
     processResources {
