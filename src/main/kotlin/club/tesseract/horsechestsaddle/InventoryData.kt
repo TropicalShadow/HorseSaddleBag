@@ -1,33 +1,25 @@
 package club.tesseract.horsechestsaddle
 
+import club.tesseract.horsechestsaddle.utils.ByteArraySerializer
 import club.tesseract.horsechestsaddle.utils.ItemStackUtils
 import org.bukkit.inventory.ItemStack
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.io.ObjectInputStream
-import java.io.ObjectOutputStream
 
 class InventoryData(capacity: Int) {
     val inventorySize: Int = capacity
     var inventory: Array<ItemStack?> = arrayOfNulls(inventorySize)
 
     fun serialize(): ByteArray{
-        val outputStream = ByteArrayOutputStream()
-        val objectOutputStream = ObjectOutputStream(outputStream)
-        objectOutputStream.writeObject(inventory.map{ ItemStackUtils.serializeItemStack(it) })
-        objectOutputStream.close()
-        return outputStream.toByteArray()
+        val serializedMap = inventory.map{ ItemStackUtils.serializeItemStack(it) }
+        return ByteArraySerializer.serializeNullableByteArrays(serializedMap)
     }
 
     companion object{
-        @Suppress("UNCHECKED_CAST")
         fun deserialize(capacity: Int, bytes: ByteArray): InventoryData{
-            val inputStream = ByteArrayInputStream(bytes)
-            val objectInputStream = ObjectInputStream(inputStream)
-            val list = objectInputStream.readObject() as List<ByteArray>
-            objectInputStream.close()
+            val serializedItems = ByteArraySerializer.deserializeNullableByteArrays(bytes)
+            val items = serializedItems.map { ItemStackUtils.deserializeItemStack(it) }
+
             val inventoryData = InventoryData(capacity)
-            inventoryData.inventory = list.map { ItemStackUtils.deserializeItemStack(it) }.toTypedArray()
+            inventoryData.inventory = items.toTypedArray()
             return inventoryData
         }
     }

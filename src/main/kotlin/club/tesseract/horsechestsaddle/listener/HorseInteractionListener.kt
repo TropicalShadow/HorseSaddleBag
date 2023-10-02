@@ -1,9 +1,11 @@
 package club.tesseract.horsechestsaddle.listener
 
+import club.tesseract.horsechestsaddle.HorseSaddleBag
 import club.tesseract.horsechestsaddle.config.ConfigManager
 import club.tesseract.horsechestsaddle.config.impl.CustomItemConfig
 import club.tesseract.horsechestsaddle.holder.SaddleBag
 import club.tesseract.horsechestsaddle.utils.ComponentUtils.toMini
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Horse
 import org.bukkit.event.EventHandler
@@ -54,15 +56,21 @@ object HorseInteractionListener: Listener {
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-    fun onEntityDeath(event: EntityDeathEvent){
+    fun onEntityDeath(event: EntityDeathEvent) {
         val entity = event.entity
-        if(entity !is Horse)return
+        if (entity !is Horse) return
+
         val horse: Horse = entity
-        val saddle = horse.inventory.saddle?: return
-        if(!saddle.itemMeta.persistentDataContainer.has(CustomItemConfig.customItemKey))return
-        val bag = SaddleBag.cache.remove(horse.uniqueId)?: return
-        try { bag.dropContent(horse.location) }catch (_: Exception){}
-        bag.delete()
+        val saddle = horse.inventory.saddle ?: return
+        if (!saddle.itemMeta.persistentDataContainer.has(CustomItemConfig.customItemKey)) return
+        Bukkit.getScheduler().runTask(HorseSaddleBag.getPlugin()) { _ ->
+            val bag = SaddleBag.cache.remove(horse.uniqueId) ?: return@runTask
+            try {
+                bag.dropContent(horse.location)
+            } catch (_: Exception) {
+            }
+            bag.delete()
+        }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
@@ -81,8 +89,10 @@ object HorseInteractionListener: Listener {
             return
         }
         val saddleBag = SaddleBag.getExisting(horse)?: return
-        saddleBag.dropContent(horse.location)
-        saddleBag.delete()
+        Bukkit.getScheduler().runTask(HorseSaddleBag.getPlugin()) { _ ->
+            saddleBag.dropContent(horse.location)
+            saddleBag.delete()
+        }
     }
 
 }

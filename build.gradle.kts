@@ -1,14 +1,14 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.20"
-    kotlin("plugin.serialization") version "1.7.20"
+    kotlin("jvm") version "1.8.10"
+    kotlin("plugin.serialization") version "1.8.10"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("xyz.jpenilla.run-paper") version "2.0.0"
 }
 
 group = "club.tesseract"
-version = "1.1.0"
+version = "1.2.0"
 
 repositories {
     mavenLocal()
@@ -22,16 +22,16 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
 
-    implementation("org.jetbrains.exposed", "exposed-core", "0.40.1")
-    implementation("org.jetbrains.exposed", "exposed-dao", "0.40.1")
-    implementation("org.jetbrains.exposed", "exposed-jdbc", "0.40.1")
-    api("org.xerial:sqlite-jdbc:3.40.0.0")
+    implementation("org.jetbrains.exposed", "exposed-core", "0.44.0")
+    implementation("org.jetbrains.exposed", "exposed-dao", "0.44.0")
+    implementation("org.jetbrains.exposed", "exposed-jdbc", "0.44.0")
+    api("org.xerial:sqlite-jdbc:3.43.0.0")
 
 }
 
 tasks{
     runServer {
-        minecraftVersion("1.20.1")
+        minecraftVersion("1.20.2")
     }
     test {
         useJUnitPlatform {
