@@ -8,17 +8,18 @@ plugins {
 }
 
 group = "club.tesseract"
-version = "1.2.0"
+version = "1.2.1"
 
 repositories {
-    mavenLocal()
     mavenCentral()
+
+    maven("https://jitpack.io")
     maven("https://repo.papermc.io/repository/maven-public/")
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
-    compileOnly("club.tesseract:HorseOverhaul:2.0.2")
+    compileOnly("com.github.TropicalShadow:HorseOverhaul:18192078e8")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
 
