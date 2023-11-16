@@ -5,6 +5,7 @@ import club.tesseract.horsechestsaddle.config.ConfigManager
 import club.tesseract.horsechestsaddle.database.DatabaseManager
 import club.tesseract.horsechestsaddle.listener.HorseInteractionListener
 import club.tesseract.horsechestsaddle.recipe.RecipeManager
+import org.bstats.bukkit.Metrics
 import org.bukkit.Bukkit
 import org.bukkit.event.HandlerList
 import org.bukkit.plugin.java.JavaPlugin
@@ -12,9 +13,11 @@ import org.bukkit.plugin.java.JavaPlugin
 @Suppress("unused")
 class HorseSaddleBag: JavaPlugin() {
 
+    private var metrics: Metrics? = null
 
     override fun onEnable() {
         ConfigManager.loadConfigs(this)
+        metrics = Metrics(this, 20308)
         try {
             DatabaseManager.connect()
         }catch (e: Exception){
@@ -37,6 +40,7 @@ class HorseSaddleBag: JavaPlugin() {
         HandlerList.unregisterAll(this)
         RecipeManager.unloadRecipes()
         logger.info("HorseChestSaddle has been disabled!")
+        metrics?.shutdown()
     }
 
     companion object{

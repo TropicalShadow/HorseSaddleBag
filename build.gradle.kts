@@ -21,6 +21,8 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
     compileOnly("com.github.TropicalShadow:HorseOverhaul:18192078e8")
 
+    compileOnly("org.bstats:bstats-bukkit:3.0.2")
+
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
 
     implementation("org.jetbrains.exposed", "exposed-core", "0.44.0")
@@ -46,6 +48,7 @@ tasks{
 
         relocate("kotlinx", "club.tesseract.horsechestsaddle.kotlinx")
         relocate("org.xerial", "club.tesseract.horsechestsaddle.xerial")
+        relocate("org.bstats", "club.tesseract.horsechestsaddle.bstats")
     }
     processResources {
         filter<org.apache.tools.ant.filters.ReplaceTokens>("tokens" to mapOf("version" to project.version))
