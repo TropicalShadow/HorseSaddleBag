@@ -1,14 +1,15 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.8.10"
+    kotlin("jvm") version "2.1.20"
     kotlin("plugin.serialization") version "1.8.10"
-    id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("xyz.jpenilla.run-paper") version "2.0.0"
+    id("io.github.goooler.shadow") version "8.1.8"
+    id("xyz.jpenilla.run-paper") version "2.3.1"
 }
 
 group = "club.tesseract"
-version = "1.2.1"
+version = "1.2.2"
 
 repositories {
     mavenCentral()
@@ -18,10 +19,10 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.5-R0.1-SNAPSHOT")
     compileOnly("com.github.TropicalShadow:HorseOverhaul:18192078e8")
 
-    compileOnly("org.bstats:bstats-bukkit:3.0.2")
+    implementation("org.bstats:bstats-bukkit:3.0.2")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
 
@@ -34,7 +35,7 @@ dependencies {
 
 tasks{
     runServer {
-        minecraftVersion("1.20.2")
+        minecraftVersion("1.21.5")
     }
     test {
         useJUnitPlatform {
@@ -56,9 +57,7 @@ tasks{
 }
 
 
-val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions.jvmTarget = JavaVersion.VERSION_16.toString()
 
-compileKotlin.kotlinOptions {
-    freeCompilerArgs = listOf("-Xinline-classes")
+kotlin{
+    jvmToolchain(21)
 }

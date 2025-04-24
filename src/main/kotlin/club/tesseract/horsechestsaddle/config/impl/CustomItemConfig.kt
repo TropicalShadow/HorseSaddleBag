@@ -1,12 +1,14 @@
 package club.tesseract.horsechestsaddle.config.impl
 
 import club.tesseract.horsechestsaddle.HorseSaddleBag
+import io.papermc.paper.datacomponent.item.CustomModelData
 import kotlinx.serialization.Serializable
 import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.components.CustomModelDataComponent
 import org.bukkit.persistence.PersistentDataType
 
 @Serializable

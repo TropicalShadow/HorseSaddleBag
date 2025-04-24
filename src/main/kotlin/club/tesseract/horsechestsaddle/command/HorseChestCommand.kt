@@ -19,11 +19,11 @@ object HorseChestCommand: TabExecutor {
         sender: CommandSender,
         command: Command,
         label: String,
-        args: Array<out String>?
+        args: Array<out String>
     ): MutableList<String> {
         val result = mutableListOf<String>()
         if(!sender.hasPermission("horsechestsaddle.command")) return result
-        if(args == null || args.isEmpty()){
+        if(args.isEmpty()){
             result.add("reload")
             result.add("give")
             return result
@@ -32,12 +32,12 @@ object HorseChestCommand: TabExecutor {
     }
 
 
-    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>?): Boolean {
+    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if(!sender.hasPermission("horsechestsaddle.command")){
             sender.sendMessage("<red>You do not have permission to use this command!".toMini())
             return true
         }
-        if(args == null || args.isEmpty()){
+        if(args.isEmpty()){
             sender.sendMessage("<red>Invalid usage! /horsechest <reload|give>".toMini())
             return true
         }
